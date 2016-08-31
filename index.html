@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://use.fontawesome.com/1a76820616.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="pomodoro.js"></script>
+
+</head>
+<body>
+
+<!-- Settings -->
+<div class="modal fade" tabindex="-1" role="dialog" id="settingsModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="text-align: center">Settings</h4>
+        <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="longBreak">Long break</label>
+            <input type="text" class="form-control" id="longBreak" placeholder="25:00" autocomplete="off">
+          </div>
+
+        <div class="form-group">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="wantNotification" id="wantNotification" checked="checked"> Notification
+                </label>
+              </div>
+          </div>
+
+          <button type="submit" class="btn btn-default" id="saveLongBreak" data-dismiss="modal">Save</button>
+        </form>
+        </div>
+      </div>
+      <div class="modal-footer" style="text-align: center;">
+        <button type="button" class="btn btn-success" data-dismiss="modal" id="closeTaskModal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Info -->
+<div class="modal fade" tabindex="-1" role="dialog" id="infoModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="text-align: center">Rules of the Pomodoro</h4>
+        <div class="modal-body">
+            <h3>Rules</h3>
+            <ul class="list-group">
+              <li class="list-group-item">A Pomodoro Consists of 25 minutes Plus a Five-Minute Break</li>  
+              <li class="list-group-item">After Every Four Pomodoros Comes a 15-30 Minute Break</li>
+              <li class="list-group-item">The Pomodoro Is Indivisible. There are no half or quarter Pomodoros</li>
+              <li class="list-group-item">If a Pomodoro Begins, It Has to Ring:
+              <ul>
+                  <li>If a Pomodoro is interrupted definitively - i.e. the interruption isn't handled - it's considered void, never begun, and it can't be recorded with an X.</li>
+                  <li>If an activity is completed once a Pomodoro has already begun, continue reviewing the same activity until the Pomodoro rings</li>
+              </ul>
+              <li class="list-group-item">Protect the Pomodoro. Inform effectively, negotiate quickly to reschedule the interruption, call back the person who interrupted you as agreed.</li>
+              <li class="list-group-item">If It Lasts More Than 5-7 Pomodoros, Break It Down. Complex activities should be divided into several activities.</li>
+              <li class="list-group-item">If It Lasts Less Than One Pomodoro, Add It Up. Simple tasks can be combined.</li>
+              <li class="list-group-item">Results Are Achieved Pomodoro after Pomodoro.</li>
+              <li class="list-group-item">The Next Pomodoro Will Go Better.</li>
+            </ul>
+        </div>
+      </div>
+      <div class="modal-footer" style="text-align: center;">
+        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+    
+<!-- Popup alert -->
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="text-align: center">Modal title</h4>
+        <div class="modal-body">
+        </div>
+      </div>
+      <div class="modal-footer" style="text-align: center;">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="switchTask">Switch task</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" id="closeModal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Task -->
+<div class="modal fade" tabindex="-1" role="dialog" id="addTaskModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="text-align: center">Create a new task</h4>
+        <div class="modal-body">
+        <form class="form-inline" action="#">
+          <div class="form-group">
+            <label for="task_name">Task</label>
+            <input type="task_name" class="form-control" id="task_name" placeholder="Work on..." style="width: 400px;">
+          </div>
+          <button id="saveTask" type="submit" class="btn btn-default" data-dismiss="modal">Add</button>
+        </form>
+      </div>
+      </div>
+      <div class="modal-footer" style="text-align: center;">
+        <button type="button" class="btn btn-success" data-dismiss="modal" id="closeTaskModal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+    <div style="padding: 20px;">
+        <div class="panel panel-primary" style="width: 500px; margin: 0 auto; ">
+            <div class="panel-heading"><i class="fa fa-clock-o" aria-hidden="true"></i> Pomodoro</div>
+            <div class="panel-body">
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                    <span></span>
+                  </div>
+                </div>    
+            </div>
+            <div class="panel-footer" style="text-align: center;"><span class="badge" id="panel-footer" style="font-size: 20px; background-color: #337ab7;">25:00</span></div>
+        </div>
+        
+        
+        <div style="text-align: center; padding: 20px;">
+            <button id="myButton" type="button" class="btn btn-success btn-lg" autocomplete="off">
+                Start Pomodoro
+            </button>
+            <br/><br/>
+            <button id="internalButton" type="button" class="btn btn-warning disabled" autocomplete="off">
+                Internal interrupt
+            </button>
+            <button id="externalButton" type="button" class="btn btn-danger disabled" autocomplete="off">
+                External Interrupt
+            </button>
+        </div>
+    
+        <div class="panel panel-primary" style="width: 800px; margin: 0 auto; ">
+            <div class="panel-heading"><i class="fa fa-tasks" aria-hidden="true"></i> To do today</div>
+            <div class="panel-body">
+                
+                
+            <table id="table" class="table table-striped" data-click-to-select="true" data-single-select="true" data-maintain-selected="true">
+            </table>
+            </div>
+            <div class="panel-footer" style="text-align: center;">
+            <button id="addTask" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTaskModal" autocomplete="off">
+                Add task
+            </button> 
+            <button id="removeSelected" class="btn btn-large btn-primary" style="margin: 0px 15px 0px 15px;">
+              Remove selected
+            </button>
+            <!--button id="removeAllTask" class="btn btn-large btn-danger">
+              Remove all
+            </button-->
+            <button id="markAsDone" class="btn btn-large btn-success">
+              Mark as done
+            </button>
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 400px; text-align: center; margin: 0 auto; ">
+        <button type="button" class="btn btn-primary" area-label="Info" data-toggle="modal" data-target="#infoModal">
+          <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Info
+        </button>
+        <button id="settingsModalButton" type="button" class="btn btn-primary" area-label="Info" data-toggle="modal" data-target="#settingsModal">
+          <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings
+        </button>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    
+$('#saveTask').on('click', function (event) {
+
+    event.preventDefault();
+    task_name = $('#task_name').val();
+    addNewTodoItem(task_name);
+    populateTasks();
+});
+
+
+$('#myButton').on('click', function () {
+
+    st = $('#table').bootstrapTable('getSelections');
+
+    if (st == '') {
+        return;
+    }    
+    
+    saveSelectedTask(st[0]);
+
+
+    if (counterBack >= 1) {
+        i = 0;
+        counter--;
+        clearInterval(counterBack);
+        $(this).text("Start pomodoro");
+        $(this).removeClass("btn-danger");
+        $(this).addClass("btn-success");
+        counterBack = 0;
+    } else {
+        startCounting();
+        $(this).text("Stop pomodoro");
+        $(this).removeClass("btn-success");
+        $(this).addClass("btn-danger");
+    }
+    
+});   
+
+$('#closeModal').on('click', function () {
+    startCounting();
+});
+
+$('#removeAllTask').on('click', function() {
+    localStorage.clear();
+    loadTasks();
+});
+
+$('#removeSelected').on('click', function() {
+    removeSelected();
+    localStorage.removeItem("selected_task");
+});
+
+
+$('#settingsModalButton').on('click', function() {
+    var settings = null;
+
+    try {
+        settings = JSON.parse(localStorage.getItem("pomodoro_settings"));
+    } catch(err) { }
+
+    if ( settings != null ) {
+        $('#longBreak').val(formatSeconds(settings.long_break));
+        $('#wantNotification').prop('checked', settings.notification);
+    }
+});
+
+$('#saveLongBreak').on('click', function (event) {
+
+    event.preventDefault();
+    saveSettings($('#longBreak').val(), $('#wantNotification').is(':checked'));
+    
+});
+
+
+$('#markAsDone').on('click', function(event) {
+  markDoneSelected();  
+  localStorage.removeItem("selected_task");
+  loadTasks();
+})
+
+$('#switchTask').on('click', function(event) {
+    $('#myButton').text("Start pomodoro");
+    $('#myButton').removeClass("btn-danger");
+    $('#myButton').addClass("btn-success");   
+});
+    
+</script>
+
+</body>
+    
+</html>
+
