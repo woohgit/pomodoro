@@ -3,11 +3,12 @@ DEFAULT_LONG_BREAK = 1500;
 DEFAULT_SHORT_BREAK = 300;
 counterBack = 0;
 
-workingPomodoro = 5;
-shortBreak = 2;
-longBreak = 3;
+workingPomodoro = 25*60;
+shortBreak = getShortBreak();
+longBreak = getLongBreak();
 
-i = workingPomodoro;
+localStorage.removeItem("pomodoro_settings");
+
 
 selected_task = '';
 
@@ -35,9 +36,9 @@ closeButtonText = [workButtonText, coffeeButtonText, workButtonText, coffeeButto
 
 
 
-pomodoroGlyph = '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';
-externalInterrupt = '</span><span class="glyphicon glyphicon-minus" aria-hidden="true"></span>';
-internalInterrupt = '</span><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>';
+pomodoroGlyph = '<i class="fa fa-check-square-o" aria-hidden="true"></i>';
+externalInterrupt = '<i class="fa fa-times" aria-hidden="true"></i>';
+internalInterrupt = '<i class="fa fa-times" aria-hidden="true"></i>';
 
 
 function loadTodo() {
@@ -206,13 +207,13 @@ function populateTasks() {
             title: 'Task name'
         }, {
             field: 'pomodoros',
-            title: pomodoroGlyph + ' Pomodoros'
+            title: '# of Pomodoros'
         }, {
             field: 'internal',
-            title: internalInterrupt + ' Internal'
+            title: '# of Internal'
         }, {
             field: 'external',
-            title: externalInterrupt + ' External'
+            title: '# of External'
         }],
         data: data
     });
@@ -304,9 +305,9 @@ function cellStyle(value, row, index, field) {
 function stateFormatter(value, row, index) {
 
     st = getSelectedTask();
-    row.pomodoros = pomodoroGlyph.repeat(row.pomodoros);
-    row.internal = internalInterrupt.repeat(row.internal);
-    row.external = externalInterrupt.repeat(row.external);
+    row.pomodoros = (pomodoroGlyph + ' ').repeat(row.pomodoros);
+    row.internal = (internalInterrupt + ' ').repeat(row.internal);
+    row.external = (externalInterrupt + ' ').repeat(row.external);
 
     if (st != null) {
         if (row.task == st.task) {
@@ -333,8 +334,17 @@ function convertStringTimeToSeconds(text) {
 
 function saveSettings(longBreak, notification, shortBreak) {
 
-    long_break = convertStringTimeToSeconds(longBreak);
-    short_break = convertStringTimeToSeconds(shortBreak);
+    if ( longBreak == '' ) {
+        long_break = getLongBreak();
+    } else {
+        long_break = convertStringTimeToSeconds(longBreak);
+    }
+
+    if ( shortBreak == '' ) {
+        short_break = getShortBreak();
+    } else {
+        short_break = convertStringTimeToSeconds(shortBreak);
+    }
     data = {
         'long_break': long_break,
         'notification': notification,
