@@ -2,9 +2,9 @@ counter = 0;
 
 counterBack = 0;
 
-workingPomodoro = 10;
-shortBreak = 5;
-longBreak = 7;
+workingPomodoro = 5;
+shortBreak = 2;
+longBreak = 3;
 
 i = workingPomodoro;
 
@@ -112,6 +112,11 @@ document.addEventListener('DOMContentLoaded', function () {
     Notification.requestPermission();
 });
 
+function audioNotification(){
+    var alertSound = new Audio('demonstrative.mp3');
+    alertSound.play();
+}
+
 function notifyMe(title, message) {
 
     try {
@@ -125,8 +130,9 @@ function notifyMe(title, message) {
   
   
   if (Notification.permission !== "granted")
-    Notification.requestPermission();
+      Notification.requestPermission();
   else {
+    audioNotification();
     var notification = new Notification(title, {
       icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Ic_timer_48px.svg/48px-Ic_timer_48px.svg.png',
       body: message,
@@ -135,9 +141,7 @@ function notifyMe(title, message) {
     notification.onclick = function () {
       window.open("http://stackoverflow.com/a/13328397/1269037");      
     };
-
   }
-
 }
 
 function loadTasks() {
@@ -227,7 +231,6 @@ function stateFormatter(value, row, index) {
     if (row.done == true) {
       row.task = "<strike>" + row.task + "</strike>";
       return {
-          disabled: true,
           checked: false
       }
     }
@@ -280,9 +283,14 @@ function increasePomodoro() {
 
 function removeSelected() {
   
-    st = getSelectedTask();
-    task_name = st.task;
+    st = $('#table').bootstrapTable('getSelections');
     
+    if (st.length == 0) {
+      return;
+    }
+
+    task_name = st[0].task.replace(/(<([^>]+)>)/ig,"");
+
     data = loadTodo();
     var i = 0;
     for (var key in data) {
@@ -320,4 +328,41 @@ function markDoneSelected() {
         i++;
     }
     saveTasks(data);
+}
+
+function isTaskDisabled(task) {
+    task_name = task.task.replace(/(<([^>]+)>)/ig,"");
+    data = loadTodo();
+    var i = 0;
+    for (var key in data) {
+        if (data[key].task == task_name) {
+          if (data[key].done == true) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+    }
+}
+
+function disableButtonsDuringPomodoro() {
+    $('#internalButton').removeClass('disabled');
+    $('#externalButton').removeClass('disabled');
+    
+    $('#addTask').addClass('disabled');
+    $('#removeSelected').addClass('disabled');
+    $('#markAsDone').addClass('disabled');
+    $('#infoModal').addClass('disabled');
+    $('#settingsModalButton').addClass('disabled');
+}
+
+function enableButtonsDuringNonPomodoro() {
+  $('#internalButton').addClass('disabled');
+  $('#externalButton').addClass('disabled');
+  
+  $('#addTask').removeClass('disabled');
+  $('#removeSelected').removeClass('disabled');
+  $('#markAsDone').removeClass('disabled');
+  $('#infoModal').removeClass('disabled');
+  $('#settingsModalButton').removeClass('disabled');
 }

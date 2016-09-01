@@ -57,9 +57,9 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" style="text-align: center">Rules of the Pomodoro</h4>
+        <h1 class="modal-title" style="text-align: center">Information about this site</h1>
         <div class="modal-body">
-            <h3>Rules</h3>
+            <h3>Rules of The Pomodoro Technique&reg;</h3>
             <ul class="list-group">
               <li class="list-group-item">A Pomodoro Consists of 25 minutes Plus a Five-Minute Break</li>  
               <li class="list-group-item">After Every Four Pomodoros Comes a 15-30 Minute Break</li>
@@ -198,6 +198,7 @@ $('#saveTask').on('click', function (event) {
     task_name = $('#task_name').val();
     addNewTodoItem(task_name);
     populateTasks();
+    $('#task_name').val("");
 });
 
 
@@ -205,13 +206,21 @@ $('#myButton').on('click', function () {
 
     st = $('#table').bootstrapTable('getSelections');
 
+    // if no task is selected, we can't run a pomodoro
     if (st == '') {
         return;
-    }    
+    }
+
+    // we don't want to work on already done tasks
+    if (isTaskDisabled(st[0])) {
+      return;
+    }
     
+    // save the selected task as the "selected_task" to localStorage
     saveSelectedTask(st[0]);
 
 
+    // When the counter is running, change text
     if (counterBack >= 1) {
         i = 0;
         counter--;
@@ -220,7 +229,9 @@ $('#myButton').on('click', function () {
         $(this).removeClass("btn-danger");
         $(this).addClass("btn-success");
         counterBack = 0;
+    // when no counter is running change back text
     } else {
+        disableButtonsDuringPomodoro();
         startCounting();
         $(this).text("Stop pomodoro");
         $(this).removeClass("btn-success");
@@ -272,6 +283,7 @@ $('#markAsDone').on('click', function(event) {
 })
 
 $('#switchTask').on('click', function(event) {
+    enableButtonsDuringNonPomodoro();
     $('#myButton').text("Start pomodoro");
     $('#myButton').removeClass("btn-danger");
     $('#myButton').addClass("btn-success");   
