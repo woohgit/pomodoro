@@ -1,377 +1,455 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="https://use.fontawesome.com/1a76820616.js"></script>
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
-<script type="text/javascript" src="pomodoro.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://use.fontawesome.com/1a76820616.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
+    <script type="text/javascript" src="pomodoro.js"></script>
+
+    <script>
+        (function(i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-43666516-8', 'auto');
+        ga('send', 'pageview');
+    </script>
 
 </head>
+
 <body>
 
-<!-- Settings -->
-<div class="modal fade" tabindex="-1" role="dialog" id="settingsModal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" style="text-align: center">Settings</h4>
-        <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="longBreak">Long break</label>
-            <input type="text" class="form-control" id="longBreak" placeholder="25:00" autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="shortBreak">Short break</label>
-            <input type="text" class="form-control" id="shortBreak" placeholder="05:00" autocomplete="off">
-          </div>
-        <div class="form-group">
-              <div class="checkbox">
-                <label>
+    <a href="https://github.com/woohgit/pomodoro"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/e7bbb0521b397edbd5fe43e7f760759336b5e05f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67"
+            alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png"></a>
+
+    <!-- Settings -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="settingsModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" style="text-align: center">Settings</h4>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="longBreak">Long break</label>
+                                <input type="text" class="form-control" id="longBreak" placeholder="25:00" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="shortBreak">Short break</label>
+                                <input type="text" class="form-control" id="shortBreak" placeholder="05:00" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
                   <input type="checkbox" name="wantNotification" id="wantNotification" checked="checked"> Notification
                 </label>
-              </div>
-          </div>
+                                </div>
+                            </div>
 
-          <button type="submit" class="btn btn-default" id="saveSettingsButton" data-dismiss="modal">Save</button>
-        </form>
+                            <button type="submit" class="btn btn-default" id="saveSettingsButton" data-dismiss="modal">Save</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" id="closeTaskModal">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer" style="text-align: center;">
-        <button type="button" class="btn btn-success" data-dismiss="modal" id="closeTaskModal">Close</button>
-      </div>
     </div>
-  </div>
-</div>
 
-<!-- Info -->
-<div class="modal fade" tabindex="-1" role="dialog" id="infoModal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title" style="text-align: center">Info</h1>
-        <div class="modal-body">
-          <h3>What is it?</h3>
-          <p>This is an app for <b>The Pomodoro Technique&reg;</b>. It tries to strictly follow the rules of The Pomodoro Technique&reg;.</p>
-          <h3>What is it not?</h3>
-          <p>This is NOT a GTD replacement tool. You should still keep everything in your GTD tool like:
-          <ul>
-            <li>Evernote</li>
-            <li>Wunderlist</li>
-            <li>Things 2</li>
-            <li>etc.</li>
-          </ul>
-          This app uses only your browser's local storage, so it won't be able to sync tasks between your devices. Pomodoro helps you to focus on your tasks.
-          Every morning you should collect a few tasks from your GTD system you want to accomplish today and start working on them.
-          </p>
-        <h3>Valid pomodoro</h3>
-        <p>If pomodoro rings you'll earn a pomodoro sign <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> next to your task.</p>
-        <h3>Unplanned & Urgent</h3>
-        <p>During internal and external interruptions, you'll add items to your Unplanned & Urgent list. At the end of the day, you should move the remaining to your GTD system. Remember: You should keep everything in one place when using GTD.</p>
-        <h3>Activity inventory</h3>
-        <p>I'm breaking only one rule here: I'm not maintaining an <b>Activity Inventory</b>. You should keep that in your GTD tool of choice. You should only store your daily items here. After every day, the remainder items should be moved to your GTD system.</p>
-        <h3>Internal and External Interrupts</h3>
-        <p>Clicking on either of the buttons will create a new entry into the <p>Unplanned & Urgent</p> table and also create an internal </span><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> or external </span><span class="glyphicon glyphicon-minus" aria-hidden="true"></span> sign next to your current task.</p>
+    <!-- Info -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="infoModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h1 class="modal-title" style="text-align: center">Info</h1>
+                    <div class="modal-body">
+                        <h3>What is it?</h3>
+                        <p>This is an app for <b>The Pomodoro Technique&reg;</b>. It tries to strictly follow the rules of The Pomodoro Technique&reg;.</p>
+                        <h3>What is it not?</h3>
+                        <p>This is NOT a GTD replacement tool. You should still keep everything in your GTD tool like:
+                            <ul>
+                                <li>Evernote</li>
+                                <li>Wunderlist</li>
+                                <li>Things 2</li>
+                                <li>etc.</li>
+                            </ul>
+                            This app uses only your browser's local storage, so it won't be able to sync tasks between your devices. Pomodoro helps you to focus on your tasks. Every morning you should collect a few tasks from your GTD system you want to accomplish today and start
+                            working on them.
+                        </p>
+                        <h3>Valid pomodoro</h3>
+                        <p>If pomodoro rings you'll earn a pomodoro sign <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> next to your task.</p>
+                        <h3>Unplanned & Urgent</h3>
+                        <p>During internal and external interruptions, you'll add items to your Unplanned & Urgent list. At the end of the day, you should move the remaining to your GTD system. Remember: You should keep everything in one place when using
+                            GTD.</p>
+                        <h3>Activity inventory</h3>
+                        <p>I'm breaking only one rule here: I'm not maintaining an <b>Activity Inventory</b>. You should keep that in your GTD tool of choice. You should only store your daily items here. After every day, the remainder items should be moved
+                            to your GTD system.</p>
+                        <h3>Internal and External Interrupts</h3>
+                        <p>Clicking on either of the buttons will create a new entry into the
+                            <p>Unplanned & Urgent</p> table and also create an internal </span><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> or external </span><span class="glyphicon glyphicon-minus" aria-hidden="true"></span>                            sign next to your current task.</p>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer" style="text-align: center;">
-        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-      </div>
     </div>
-  </div>
-</div>
 
-<!-- Rules -->
-<div class="modal fade" tabindex="-1" role="dialog" id="rulesModal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title" style="text-align: center">Rules of The Pomodoro Technique&reg;</h1>
-        <div class="modal-body">
-            <ul class="list-group">
-              <li class="list-group-item">A Pomodoro Consists of 25 minutes Plus a Five-Minute Break</li>  
-              <li class="list-group-item">After Every Four Pomodoros Comes a 15-30 Minute Break</li>
-              <li class="list-group-item">The Pomodoro Is Indivisible. There are no half or quarter Pomodoros</li>
-              <li class="list-group-item">If a Pomodoro Begins, It Has to Ring:
-              <ul>
-                  <li>If a Pomodoro is interrupted definitively - i.e. the interruption isn't handled - it's considered void, never begun, and it can't be recorded with an X.</li>
-                  <li>If an activity is completed once a Pomodoro has already begun, continue reviewing the same activity until the Pomodoro rings</li>
-              </ul>
-              <li class="list-group-item">Protect the Pomodoro. Inform effectively, negotiate quickly to reschedule the interruption, call back the person who interrupted you as agreed.</li>
-              <li class="list-group-item">If It Lasts More Than 5-7 Pomodoros, Break It Down. Complex activities should be divided into several activities.</li>
-              <li class="list-group-item">If It Lasts Less Than One Pomodoro, Add It Up. Simple tasks can be combined.</li>
-              <li class="list-group-item">Results Are Achieved Pomodoro after Pomodoro.</li>
-              <li class="list-group-item">The Next Pomodoro Will Go Better.</li>
-            </ul>
+    <!-- Rules -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="rulesModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h1 class="modal-title" style="text-align: center">Rules of The Pomodoro Technique&reg;</h1>
+                    <div class="modal-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">A Pomodoro Consists of 25 minutes Plus a Five-Minute Break</li>
+                            <li class="list-group-item">After Every Four Pomodoros Comes a 15-30 Minute Break</li>
+                            <li class="list-group-item">The Pomodoro Is Indivisible. There are no half or quarter Pomodoros</li>
+                            <li class="list-group-item">If a Pomodoro Begins, It Has to Ring:
+                                <ul>
+                                    <li>If a Pomodoro is interrupted definitively - i.e. the interruption isn't handled - it's considered void, never begun, and it can't be recorded with an X.</li>
+                                    <li>If an activity is completed once a Pomodoro has already begun, continue reviewing the same activity until the Pomodoro rings</li>
+                                </ul>
+                                <li class="list-group-item">Protect the Pomodoro. Inform effectively, negotiate quickly to reschedule the interruption, call back the person who interrupted you as agreed.</li>
+                                <li class="list-group-item">If It Lasts More Than 5-7 Pomodoros, Break It Down. Complex activities should be divided into several activities.</li>
+                                <li class="list-group-item">If It Lasts Less Than One Pomodoro, Add It Up. Simple tasks can be combined.</li>
+                                <li class="list-group-item">Results Are Achieved Pomodoro after Pomodoro.</li>
+                                <li class="list-group-item">The Next Pomodoro Will Go Better.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer" style="text-align: center;">
-        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-      </div>
     </div>
-  </div>
-</div>
-    
-<!-- Popup alert -->
-<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" style="text-align: center">Modal title</h4>
-        <div class="modal-body">
+
+    <!-- Popup alert -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" style="text-align: center">Modal title</h4>
+                    <div class="modal-body">
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="switchTask">Switch task</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" id="closeModal">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer" style="text-align: center;">
-        <button type="button" class="btn btn-primary" data-dismiss="modal" id="switchTask">Switch task</button>
-        <button type="button" class="btn btn-success" data-dismiss="modal" id="closeModal">Close</button>
-      </div>
     </div>
-  </div>
-</div>
 
-<!-- Add Task -->
-<div class="modal fade" tabindex="-1" role="dialog" id="addTaskModal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" style="text-align: center">Create a new task</h4>
-        <div class="modal-body">
-        <form class="form-inline" action="#">
-          <div class="form-group">
-            <label for="task_name">Task</label>
-            <input type="task_name" class="form-control" id="task_name" placeholder="Work on..." style="width: 400px;">
-          </div>
-          <button id="saveTask" type="submit" class="btn btn-default" data-dismiss="modal">Add</button>
-        </form>
-      </div>
-      </div>
-      <div class="modal-footer" style="text-align: center;">
-        <button type="button" class="btn btn-success" data-dismiss="modal" id="closeTaskModal">Close</button>
-      </div>
+
+    <!-- Internal/External interrupt -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="interruptModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" style="text-align: center">Create new interrupt</h4>
+                    <div class="modal-body">
+                        <form class="form-inline" action="#">
+                            <div class="form-group">
+                                <label for="unplanned_cause">Unplanned issue</label>
+                                <input type="text" class="form-control" id="unplanned_cause" placeholder="Interrupted because..." style="width: 400px;">
+                                <input type="text" class="hidden" id="unplanned_type" name="unplanned_type" value="">
+                            </div>
+                            <button id="saveUnplanned" type="submit" class="btn btn-default" data-dismiss="modal">Save</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<div style="width: 400px; text-align: center; margin: 0 auto; margin-top: 20px; ">
-    <button type="button" class="btn btn-primary" area-label="Info" data-toggle="modal" data-target="#infoModal">
+    <!-- Add Task -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="addTaskModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" style="text-align: center">Create a new task</h4>
+                    <div class="modal-body">
+                        <form class="form-inline" action="#">
+                            <div class="form-group">
+                                <label for="task_name">Task</label>
+                                <input type="text" class="form-control" id="task_name" placeholder="Work on..." style="width: 400px;">
+                            </div>
+                            <button id="saveTask" type="submit" class="btn btn-default" data-dismiss="modal">Add</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" id="closeTaskModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 400px; text-align: center; margin: 0 auto; margin-top: 20px; ">
+        <button type="button" class="btn btn-primary" area-label="Info" data-toggle="modal" data-target="#infoModal">
       <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Info
     </button>
 
-    <button type="button" class="btn btn-primary" area-label="Info" data-toggle="modal" data-target="#rulesModal">
+        <button type="button" class="btn btn-primary" area-label="Info" data-toggle="modal" data-target="#rulesModal">
       <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Rules
     </button>
-    <button id="settingsModalButton" type="button" class="btn btn-primary" area-label="Info" data-toggle="modal" data-target="#settingsModal">
+        <button id="settingsModalButton" type="button" class="btn btn-primary" area-label="Info" data-toggle="modal" data-target="#settingsModal">
       <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings
     </button>
-    <button id="statsModalButton" type="button" class="btn btn-primary" area-label="Stats" data-toggle="modal" data-target="#statsModal">
+        <button id="statsModalButton" type="button" class="btn btn-primary disabled" area-label="Stats" data-toggle="modal" data-target="#statsModal">
       <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Stats
     </button>
-</div>
+    </div>
 
-<div class="container-fluid">
-    <div style="padding: 20px;">
-        <div class="panel panel-primary" style="width: 500px; margin: 0 auto; ">
-            <div class="panel-heading"><i class="fa fa-clock-o" aria-hidden="true"></i> Pomodoro</div>
-            <div class="panel-body">
-                <div class="progress">
-                  <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-                    <span></span>
-                  </div>
-                </div>    
+    <div class="container-fluid">
+        <div style="padding: 20px;">
+            <div class="panel panel-primary" style="width: 500px; margin: 0 auto; ">
+                <div class="panel-heading"><i class="fa fa-clock-o" aria-hidden="true"></i> Pomodoro</div>
+                <div class="panel-body">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped" role="progressbar" id="pbar" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer" style="text-align: center;"><span class="badge" id="panel-footer" style="font-size: 15px; background-color: #337ab7;">25:00</span></div>
             </div>
-            <div class="panel-footer" style="text-align: center;"><span class="badge" id="panel-footer" style="font-size: 15px; background-color: #337ab7;">25:00</span></div>
-        </div>
-        
-        
-        <div style="text-align: center; padding: 20px;">
-            <button id="internalButton" type="button" class="btn btn-warning disabled" autocomplete="off">
+
+
+            <div style="text-align: center; padding: 20px;">
+                <button id="internalButton" type="button" class="btn btn-warning disabled" disabled="true" autocomplete="off" data-toggle="modal" data-target="#interruptModal">
                 Internal interrupt
             </button>
-            <button id="myButton" type="button" class="btn btn-success" autocomplete="off">
+                <button id="myButton" type="button" class="btn btn-success" autocomplete="off">
                 Start Pomodoro
             </button>
-            <button id="externalButton" type="button" class="btn btn-danger disabled" autocomplete="off">
+                <button id="externalButton" type="button" class="btn btn-danger disabled" disabled="true" autocomplete="off" data-toggle="modal" data-target="#interruptModal">
                 External Interrupt
             </button>
-        </div>
-    
-        <div class="panel panel-primary" style="width: 800px; margin: 0 auto; margin-bottom: 10px;">
-           <ul class="nav nav-pills">
-            <li role="presentation" class="active" id="todo_menu"><a href="#"><i class="fa fa-tasks" aria-hidden="true"></i> To do today <span class="badge" id="todo_count">0</span></a></li>
-            <li role="presentation" id="unplanned_menu"><a href="#"><i class="fa fa-tasks" aria-hidden="true"></i> Unplanned & Urgent <span class="badge" id="urgent_count">0</span></a></li>
-          </ul>
-        </div>
-
-        <div id="todo_panel" class="panel panel-primary" style="width: 800px; margin: 0 auto; ">
-            <div class="panel-heading"></div>
-            <div class="panel-body">
-              <table id="todo_table" class="table table-striped" data-click-to-select="true" data-single-select="true" data-maintain-selected="true"></table>
             </div>
-            <div class="panel-footer" style="text-align: center;">
-              <button id="addTask" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTaskModal" autocomplete="off">
+
+            <div class="panel panel-primary" style="width: 800px; margin: 0 auto; margin-bottom: 10px;">
+                <ul class="nav nav-pills">
+                    <li role="presentation" class="active" id="todo_menu"><a href="#"><i class="fa fa-tasks" aria-hidden="true"></i> To do today <span class="badge" id="todo_count">0</span></a></li>
+                    <li role="presentation" id="unplanned_menu"><a href="#"><i class="fa fa-tasks" aria-hidden="true"></i> Unplanned & Urgent <span class="badge" id="unplanned_count">0</span></a></li>
+                </ul>
+            </div>
+
+            <div id="todo_panel" class="panel panel-primary" style="width: 800px; margin: 0 auto; ">
+                <div class="panel-heading"></div>
+                <div class="panel-body">
+                    <table id="todo_table" class="table table-striped" data-click-to-select="true" data-single-select="true" data-maintain-selected="true"></table>
+                </div>
+                <div class="panel-footer" style="text-align: center;">
+                    <button id="addTask" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTaskModal" autocomplete="off">
                 Add task
               </button>
-              <button id="removeSelected" class="btn btn-large btn-primary" style="margin: 0px 15px 0px 15px;">
+                    <button id="removeSelected" class="btn btn-large btn-primary" style="margin: 0px 15px 0px 15px;">
                 Remove selected
               </button>
-              <button id="markAsDone" class="btn btn-large btn-success">
+                    <button id="markAsDone" class="btn btn-large btn-success">
                 Mark as done
               </button>
+                </div>
             </div>
-        </div>
 
-        <div id="unplanned_panel" class="panel panel-primary hidden" style="width: 800px; margin: 0 auto;">
-            <div class="panel-heading"></div>
-            <div class="panel-body">
-              <table id="unplanned_table" class="table table-striped" data-click-to-select="true" data-single-select="true" data-maintain-selected="true"></table>
+            <div id="unplanned_panel" class="panel panel-primary hidden" style="width: 800px; margin: 0 auto;">
+                <div class="panel-heading"></div>
+                <div class="panel-body">
+                    <table id="unplanned_table" class="table table-striped" data-click-to-select="true" data-single-select="true" data-maintain-selected="true"></table>
+                </div>
+                <div class="panel-footer" style="text-align: center;">
+                    <button id="cleanupUnplanned" class="btn btn-large btn-primary">
+                CleanUp
+              </button>
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
-</div>
 
-<script type="text/javascript">
-    
-$('#saveTask').on('click', function (event) {
+    <script type="text/javascript">
+        $('#saveTask').on('click', function(event) {
 
-    event.preventDefault();
-    task_name = $('#task_name').val();
-    addNewTodoItem(task_name);
-    populateTasks();
-    $('#task_name').val("");
-});
+            event.preventDefault();
+            task_name = $('#task_name').val();
+            addNewTodoItem(task_name);
+            populateTasks();
+            $('#task_name').val("");
+        });
 
 
-$('#myButton').on('click', function () {
+        $('#myButton').on('click', function() {
 
-    st = $('#todo_table').bootstrapTable('getSelections');
+            st = $('#todo_table').bootstrapTable('getSelections');
 
-    // if no task is selected, we can't run a pomodoro
-    if (st == '') {
-        return;
-    }
+            // if no task is selected, we can't run a pomodoro
+            if (st == '') {
+                return;
+            }
 
-    // we don't want to work on already done tasks
-    if (isTaskDisabled(st[0])) {
-      return;
-    }
-    
-    // save the selected task as the "selected_task" to localStorage
-    saveSelectedTask(st[0]);
+            // we don't want to work on already done tasks
+            if (isTaskDisabled(st[0])) {
+                return;
+            }
 
-
-    // When the counter is running, change text
-    if (counterBack >= 1) {
-        i = 0;
-        counter--;
-        clearInterval(counterBack);
-        $(this).text("Start pomodoro");
-        $(this).removeClass("btn-danger");
-        $(this).addClass("btn-success");
-        counterBack = 0;
-    // when no counter is running change back text
-    } else {
-        disableButtonsDuringPomodoro();
-        startCounting();
-        $(this).text("Cancel pomodoro");
-        $(this).removeClass("btn-success");
-        $(this).addClass("btn-danger");
-    }
-    
-});   
-
-$('#closeModal').on('click', function () {
-    startCounting();
-});
-
-$('#removeAllTask').on('click', function() {
-    localStorage.clear();
-    loadTasks();
-});
-
-$('#removeSelected').on('click', function() {
-    removeSelected();
-    localStorage.removeItem("selected_task");
-});
+            // save the selected task as the "selected_task" to localStorage
+            saveSelectedTask(st[0]);
 
 
-$('#settingsModalButton').on('click', function() {
-    var settings = null;
+            // When the counter is running, change text
+            if (counterBack >= 1) {
+                i = 0;
+                counter--;
+                clearInterval(counterBack);
+                $(this).text("Start pomodoro");
+                $(this).removeClass("btn-danger");
+                $(this).addClass("btn-success");
+                counterBack = 0;
+                // when no counter is running change back text
+            }
+            else {
+                disableButtonsDuringPomodoro();
+                startCounting();
+                $(this).text("Cancel pomodoro");
+                $(this).removeClass("btn-success");
+                $(this).addClass("btn-danger");
+            }
 
-    try {
-        settings = JSON.parse(localStorage.getItem("pomodoro_settings"));
-    } catch(err) { }
+        });
 
-    console.log(JSON.stringify(settings));
-    if ( settings != null ) {
-        $('#longBreak').val(formatSeconds(getLongBreak()));
-        $('#shortBreak').val(formatSeconds(getShortBreak()));
-        $('#wantNotification').prop('checked', settings.notification);
-    }
-});
+        $('#closeModal').on('click', function() {
+            startCounting();
+        });
 
-$('#saveSettingsButton').on('click', function (event) {
+        $('#removeAllTask').on('click', function() {
+            localStorage.clear();
+            loadTasks();
+        });
 
-    event.preventDefault();
-    saveSettings($('#longBreak').val(), $('#wantNotification').is(':checked'), $('#shortBreak').val());
-
-});
+        $('#removeSelected').on('click', function() {
+            removeSelected();
+            localStorage.removeItem("selected_task");
+        });
 
 
-$('#markAsDone').on('click', function(event) {
-  markDoneSelected();  
-  localStorage.removeItem("selected_task");
-  loadTasks();
-})
+        $('#settingsModalButton').on('click', function() {
+            var settings = null;
 
-$('#switchTask').on('click', function(event) {
-    enableButtonsDuringNonPomodoro();
-    $('#myButton').text("Start pomodoro");
-    $('#myButton').removeClass("btn-danger");
-    $('#myButton').addClass("btn-success");   
-});
+            try {
+                settings = JSON.parse(localStorage.getItem("pomodoro_settings"));
+            }
+            catch (err) {}
+
+            if (settings != null) {
+                $('#longBreak').val(formatSeconds(getLongBreak()));
+                $('#shortBreak').val(formatSeconds(getShortBreak()));
+                $('#wantNotification').prop('checked', settings.notification);
+            }
+        });
+
+        $('#saveSettingsButton').on('click', function(event) {
+
+            event.preventDefault();
+            saveSettings($('#longBreak').val(), $('#wantNotification').is(':checked'), $('#shortBreak').val());
+
+        });
 
 
-$('#todo_menu').on('click', function(event) {
+        $('#markAsDone').on('click', function(event) {
+            markDoneSelected();
+            localStorage.removeItem("selected_task");
+            loadTasks();
+        })
 
-  $(this).addClass("active");
-  $('#unplanned_menu').removeClass("active");
+        $('#switchTask').on('click', function(event) {
+            enableButtonsDuringNonPomodoro();
+            $('#myButton').text("Start pomodoro");
+            $('#myButton').removeClass("btn-danger");
+            $('#myButton').addClass("btn-success");
+        });
 
-  $('#unplanned_panel').addClass("hidden");
-  $('#todo_panel').removeClass("hidden");
 
-  loadTasks();
+        $('#todo_menu').on('click', function(event) {
 
-});
+            $(this).addClass("active");
+            $('#unplanned_menu').removeClass("active");
 
-$('#unplanned_menu').on('click', function(event) {
+            $('#unplanned_panel').addClass("hidden");
+            $('#todo_panel').removeClass("hidden");
 
-  $(this).addClass("active");
-  $('#todo_menu').removeClass("active");
+            loadTasks();
 
-  $('#todo_panel').addClass("hidden");
-  $('#unplanned_panel').removeClass("hidden");
+        });
 
-  loadTasks();
-});
+        $('#unplanned_menu').on('click', function(event) {
 
-</script>
+            $(this).addClass("active");
+            $('#todo_menu').removeClass("active");
+
+            $('#todo_panel').addClass("hidden");
+            $('#unplanned_panel').removeClass("hidden");
+
+            loadTasks();
+        });
+
+        $('#saveUnplanned').on('click', function() {
+            name = $('#unplanned_cause').val();
+            type = $('#unplanned_type').val();
+
+            addNewUnplanned(name);
+            increaseInterrupt(type);
+        });
+
+        $('#externalButton').on('click', function() {
+            if (!$(this).prop('disabled')) {
+                $('#unplanned_type').val('external');
+            }
+        });
+
+        $('#internalButton').on('click', function() {
+            if (!$(this).prop('disabled')) {
+                $('#unplanned_type').val('internal');
+            }
+        });
+
+        $('#cleanupUnplanned').on('click', function() {
+            cleanupUnplanned();
+        });
+    </script>
 
 </body>
-    
-</html>
 
+</html>
