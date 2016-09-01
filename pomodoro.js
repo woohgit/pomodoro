@@ -1,5 +1,6 @@
 counter = 0;
-
+DEFAULT_LONG_BREAK = 1500;
+DEFAULT_SHORT_BREAK = 300;
 counterBack = 0;
 
 workingPomodoro = 5;
@@ -43,6 +44,23 @@ function loadTodo() {
     data = [];
   }
   
+  return data;
+}
+
+
+function loadUnplanned() {
+
+  var data = null;
+
+  try {
+    data = JSON.parse(localStorage.getItem("unplannedData"));
+  } catch(err) { }
+
+  // an empty array is a valid data source for the the bootstap-table
+  if ( data === null ) {
+    data = [];
+  }
+
   return data;
 }
 
@@ -145,13 +163,24 @@ function notifyMe(title, message) {
 }
 
 function loadTasks() {
-  data = loadTodo();
-  $('#table').bootstrapTable('load', data);
+    // depending on the selected menu
+    // load the todos or the unplanned and urgent data
+    if ( $('#todo_menu').hasClass('active') ) {
+        data = loadTodo();
+        $('#todo_table').bootstrapTable('load', data);
+
+    } else {
+        data = loadUnplanned();
+        $('#unplanned_table').bootstrapTable('load', data);
+    }
 }
 
 function populateTasks() {
+
   data = loadTodo();
-  $('#table').bootstrapTable({
+  $('#todo_count').html(data.length);
+
+  $('#todo_table').bootstrapTable({
       columns: [{
            checkbox: true,
            formatter: stateFormatter
@@ -166,6 +195,21 @@ function populateTasks() {
       },  {
            field: 'external',
            title: externalInterrupt + ' External'
+      }],
+      data: data
+  });
+
+
+  data = loadUnplanned();
+  $('#unplanned_count').html(data.length);
+
+  $('#unplanned_table').bootstrapTable({
+      columns: [{
+           checkbox: true,
+           formatter: stateFormatter
+      }, { width: 400,
+           field: 'task',
+           title: 'Cause'
       }],
       data: data
   });
@@ -244,10 +288,11 @@ function convertStringTimeToSeconds(text) {
   return seconds;
 }
 
-function saveSettings(longBreak, notification) {
+function saveSettings(longBreak, notification, shortBreak) {
   
-  seconds = convertStringTimeToSeconds(longBreak);
-  data = {'long_break': seconds, 'notification': notification};
+  long_break = convertStringTimeToSeconds(longBreak);
+  short_break = convertStringTimeToSeconds(shortBreak);
+  data = {'long_break': long_break, 'notification': notification, 'short_break': short_break};
   localStorage.setItem("pomodoro_settings", JSON.stringify(data));
 }
 
@@ -283,7 +328,7 @@ function increasePomodoro() {
 
 function removeSelected() {
   
-    st = $('#table').bootstrapTable('getSelections');
+    st = $('#todo_table').bootstrapTable('getSelections');
     
     if (st.length == 0) {
       return;
@@ -306,16 +351,13 @@ function removeSelected() {
 }
 
 function markDoneSelected() {
-    st = getSelectedTask();
-    if (st == null) {
 
-      st = $('#table').bootstrapTable('getSelections');
+    st = $('#todo_table').bootstrapTable('getSelections');
 
-      if (st == '') {
-        return;
-      }    
-      st = st[0];
+    if (st == '') {
+      return;
     }
+    st = st[0];
 
     task_name = st.task;
     
@@ -352,7 +394,7 @@ function disableButtonsDuringPomodoro() {
     $('#addTask').addClass('disabled');
     $('#removeSelected').addClass('disabled');
     $('#markAsDone').addClass('disabled');
-    $('#infoModal').addClass('disabled');
+    $('#rulesModal').addClass('disabled');
     $('#settingsModalButton').addClass('disabled');
 }
 
@@ -363,6 +405,33 @@ function enableButtonsDuringNonPomodoro() {
   $('#addTask').removeClass('disabled');
   $('#removeSelected').removeClass('disabled');
   $('#markAsDone').removeClass('disabled');
-  $('#infoModal').removeClass('disabled');
+  $('#rulesModal').removeClass('disabled');
   $('#settingsModalButton').removeClass('disabled');
+}
+
+function getLongBreak() {
+
+    settings = JSON.parse(localStorage.getItem("pomodoro_settings"));
+    if ( settings == null ) {
+        return DEFAULT_LONG_BREAK;
+    }
+
+    if ( settings.long_break == null) {
+        return DEFAULT_LONG_BREAK
+    }
+
+    return settings.long_break;
+}
+
+function getShortBreak() {
+    settings = JSON.parse(localStorage.getItem("pomodoro_settings"));
+    if ( settings == null ) {
+        return DEFAULT_SHORT_BREAK;
+    }
+
+    if ( settings.short_break == null) {
+        return DEFAULT_SHORT_BREAK
+    }
+
+    return settings.short_break;
 }
