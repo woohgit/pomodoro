@@ -455,6 +455,11 @@
         $('#cleanupUnplanned').on('click', function() {
             cleanupUnplanned();
         });
+
+        // Disable reload
+        window.onbeforeunload = function() {
+            return "Are you sure you want to reload the page? Your current pomodoro will be lost!";
+        }
     </script>
 
 </body>
