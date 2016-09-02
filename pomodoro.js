@@ -7,9 +7,6 @@ workingPomodoro = 25*60;
 shortBreak = getShortBreak();
 longBreak = getLongBreak();
 
-localStorage.removeItem("pomodoro_settings");
-
-
 selected_task = '';
 
 
@@ -162,9 +159,9 @@ function notifyMe(title, message) {
             return;
         }
     }
-    catch (err) {
-        return;
-    }
+    // if JSON.parse fails, it means no pomodoro_settings is available
+    // ignore it
+    catch (err) {}
 
 
     if (Notification.permission !== "granted")
@@ -175,10 +172,6 @@ function notifyMe(title, message) {
             icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Ic_timer_48px.svg/48px-Ic_timer_48px.svg.png',
             body: message,
         });
-
-        notification.onclick = function() {
-            window.open("http://stackoverflow.com/a/13328397/1269037");
-        };
     }
 }
 
@@ -269,28 +262,9 @@ function addNewUnplanned(name) {
 }
 
 
-function initializeSettings() {
-
-    try {
-
-        var lb = JSON.parse(localStorage.getItem("pomodoro_settings"));
-        longBreak = lb;
-
-    }
-    catch (err) {
-
-        longBreak = 25 * 60;
-
-    }
-
-}
-
 $(document).ready(function() {
-
-    initializeSettings();
-
-    //localStorage.clear();
     populateTasks();
+    settings = JSON.parse(localStorage.getItem("pomodoro_settings"));
 });
 
 function cellStyle(value, row, index, field) {
