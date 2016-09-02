@@ -1,6 +1,6 @@
 counter = 0;
-DEFAULT_LONG_BREAK = 1500;
-DEFAULT_SHORT_BREAK = 300;
+DEFAULT_LONG_BREAK = 25*60;
+DEFAULT_SHORT_BREAK = 5*60;
 counterBack = 0;
 
 workingPomodoro = 25*60;
@@ -93,13 +93,21 @@ function startCounting() {
     if (counter >= 8) {
         counter = 0;
         $('#pbar').removeClass('active');
-    } else {
+    }
+    else {
         $('#pbar').addClass('active');
     }
 
     i = pomodoroConfig[counter];
 
     counter++;
+
+    if (counter % 2 > 0) {
+        $('#internalButton').removeClass('disabled');
+        $('#externalButton').removeClass('disabled');
+        $('#internalButton').prop('disabled', false);
+        $('#externalButton').prop('disabled', false);
+    }
 
     counterBack = setInterval(function() {
         i--;
@@ -121,10 +129,18 @@ function startCounting() {
             if (counter % 2 > 0) {
                 $("#switchTask").hide();
                 increasePomodoro();
+                $('#internalButton').addClass('disabled');
+                $('#externalButton').addClass('disabled');
+                $('#internalButton').prop('disabled', true);
+                $('#externalButton').prop('disabled', true);
+                $('#myButton').prop('disabled', true);
+                $('#myButton').addClass('disabled');
                 loadTasks();
             }
             else {
                 $("#switchTask").show();
+                $('#myButton').prop('disabled', false);
+                $('#myButton').removeClass('disabled');
             }
             $('#closeModal').text(closeButtonText[counter]);
             $('#myModal').modal({
@@ -308,15 +324,17 @@ function convertStringTimeToSeconds(text) {
 
 function saveSettings(longBreak, notification, shortBreak) {
 
-    if ( longBreak == '' ) {
+    if (longBreak == '') {
         long_break = getLongBreak();
-    } else {
+    }
+    else {
         long_break = convertStringTimeToSeconds(longBreak);
     }
 
-    if ( shortBreak == '' ) {
+    if (shortBreak == '') {
         short_break = getShortBreak();
-    } else {
+    }
+    else {
         short_break = convertStringTimeToSeconds(shortBreak);
     }
     data = {
@@ -324,6 +342,7 @@ function saveSettings(longBreak, notification, shortBreak) {
         'notification': notification,
         'short_break': short_break
     };
+
     localStorage.setItem("pomodoro_settings", JSON.stringify(data));
 }
 

@@ -402,6 +402,7 @@
 
         $('#switchTask').on('click', function(event) {
             enableButtonsDuringNonPomodoro();
+            counterBack = 0;
             $('#myButton').text("Start pomodoro");
             $('#myButton').removeClass("btn-danger");
             $('#myButton').addClass("btn-success");
