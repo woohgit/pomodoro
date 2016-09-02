@@ -225,17 +225,17 @@
     </div>
 
     <div style="width: 400px; text-align: center; margin: 0 auto; margin-top: 20px; ">
-        <button type="button" class="btn btn-primary" area-label="Info" data-toggle="modal" data-target="#infoModal">
+        <button type="button" class="btn btn-default" area-label="Info" data-toggle="modal" data-target="#infoModal">
       <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Info
     </button>
 
-        <button type="button" class="btn btn-primary" area-label="Info" data-toggle="modal" data-target="#rulesModal">
+        <button type="button" class="btn btn-default" area-label="Info" data-toggle="modal" data-target="#rulesModal">
       <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Rules
     </button>
-        <button id="settingsModalButton" type="button" class="btn btn-primary" area-label="Info" data-toggle="modal" data-target="#settingsModal">
+        <button id="settingsModalButton" type="button" class="btn btn-default" area-label="Info" data-toggle="modal" data-target="#settingsModal">
       <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Settings
     </button>
-        <button id="statsModalButton" type="button" class="btn btn-primary disabled" area-label="Stats" data-toggle="modal" data-target="#statsModal">
+        <button id="statsModalButton" type="button" class="btn btn-default disabled" area-label="Stats" data-toggle="modal" data-target="#statsModal">
       <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Stats
     </button>
     </div>
@@ -339,12 +339,16 @@
             // When the counter is running, change text
             if (counterBack >= 1) {
                 i = 0;
+                $('.progress-bar').css('width', '100%');
+                $('#panel-footer').text(formatSeconds(workingPomodoro));
                 counter--;
                 clearInterval(counterBack);
                 $(this).text("Start pomodoro");
                 $(this).removeClass("btn-danger");
                 $(this).addClass("btn-success");
                 counterBack = 0;
+                enableButtonsDuringNonPomodoro();
+                $('#pbar').removeClass('active');
             }
             else {
                 disableButtonsDuringPomodoro();
