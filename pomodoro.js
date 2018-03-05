@@ -1,7 +1,10 @@
-counter = 0;
+counter = loadCounter();
+resetNewDayIfRequired();
+
 DEFAULT_LONG_BREAK = 25*60;
 DEFAULT_SHORT_BREAK = 5*60;
 counterBack = 0;
+resetNewDayDiff = 60 * 60 * 8
 
 workingPomodoro = 25*60;
 shortBreak = getShortBreak();
@@ -31,12 +34,55 @@ messageConfig = [workText, coffeText, workText, coffeText, workText, coffeText, 
 closeButtonText = [workButtonText, coffeeButtonText, workButtonText, coffeeButtonText, workButtonText, coffeeButtonText, workButtonText, coffeeButtonText, workButtonText];
 
 
-
-
 pomodoroGlyph = '<i class="fa fa-check-square-o" aria-hidden="true"></i>';
 externalInterrupt = '<i class="fa fa-times" aria-hidden="true"></i>';
 internalInterrupt = '<i class="fa fa-times" aria-hidden="true"></i>';
 
+function getEpoch() {
+  var ms = Math.floor((new Date).getTime()/1000);
+  return ts;
+}
+
+function saveLastSeen() {
+  ts = getEpoch();
+  localStorage.setItem("last_seen_time", JSON.stringify(ts));
+}
+
+function resetNewDayIfRequired() {
+  ts = getEpoch();
+  load_time = JSON.parse(localStorage.getItem("last_seen_time"));
+  if (load_time === null) {
+    // ok, noop
+  } else {
+    if (ts - last_seen_time > resetNewDayDiff ) {
+      counter = 0;
+      saveCounter(0);
+
+    }
+    saveLastSeen();
+  }
+}
+
+function loadCounter() {
+
+    var c = null;
+
+    try {
+        c = JSON.parse(localStorage.getItem("counter"));
+    }
+    catch (err) {}
+
+    // an empty array is a valid data source for the the bootstap-table
+    if (c === null) {
+        c = 0;
+    }
+
+    return c;
+}
+
+function saveCounter(c) {
+    localStorage.setItem("counter", JSON.stringify(c));
+}
 
 function loadTodo() {
 
@@ -93,14 +139,15 @@ function startCounting() {
     if (counter >= 8) {
         counter = 0;
         $('#pbar').removeClass('active');
-    }
-    else {
+    } else {
         $('#pbar').addClass('active');
     }
 
     i = pomodoroConfig[counter];
 
     counter++;
+    saveCounter(c);
+    saveLastSeen();
 
     if (counter % 2 > 0) {
         $('#internalButton').removeClass('disabled');
@@ -122,7 +169,7 @@ function startCounting() {
             modal.find('.modal-title').html(messageConfig[counter].image);
             modal.find('.modal-body').html(messageConfig[counter].text);
             $('.progress-bar').css('width', '100%');
-            $('#pbar').removeClass('active');
+            //$('#pbar').removeClass('active');
             // Every odd number is a pomodoro
             // don't let switching task before a break!
             // also increase pomodoros only when working not when having a break
