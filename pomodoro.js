@@ -146,7 +146,7 @@ function startCounting() {
     i = pomodoroConfig[counter];
 
     counter++;
-    saveCounter(c);
+    saveCounter(counter);
     saveLastSeen();
 
     if (counter % 2 > 0) {
