@@ -39,7 +39,7 @@ externalInterrupt = '<i class="fa fa-times" aria-hidden="true"></i>';
 internalInterrupt = '<i class="fa fa-times" aria-hidden="true"></i>';
 
 function getEpoch() {
-  var ms = Math.floor((new Date).getTime()/1000);
+  var ts = Math.floor((new Date).getTime()/1000);
   return ts;
 }
 
