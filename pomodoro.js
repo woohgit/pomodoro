@@ -244,6 +244,7 @@ function notifyMe(title, message) {
 
 function loadTasks() {
     data = loadTodo();
+    countCompletedPomodoros(data);
     $('#todo_count').html(data.length);
     $('#todo_table').bootstrapTable('load', data);
 
@@ -252,10 +253,19 @@ function loadTasks() {
     $('#unplanned_table').bootstrapTable('load', data);
 }
 
+function countCompletedPomodoros(data) {
+  completedCount = 0;
+  for (var i = 0; i < data.length; i++) {
+    completedCount += data[i].pomodoros;
+  }
+  $('#completed_count').html(completedCount);
+}
+
 function populateTasks() {
 
     data = loadTodo();
     $('#todo_count').html(data.length);
+    countCompletedPomodoros(data);
 
     $('#todo_table').bootstrapTable({
         columns: [{
