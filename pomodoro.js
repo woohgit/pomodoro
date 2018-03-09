@@ -1,10 +1,11 @@
 counter = loadCounter();
+resetNewDayDiff = 60 * 60 * 8;
+
 resetNewDayIfRequired();
 
 DEFAULT_LONG_BREAK = 25*60;
 DEFAULT_SHORT_BREAK = 5*60;
 counterBack = 0;
-resetNewDayDiff = 60 * 60 * 8
 
 workingPomodoro = 25*60;
 shortBreak = getShortBreak();
@@ -12,18 +13,20 @@ longBreak = getLongBreak();
 
 selected_task = '';
 
-
 coffeText = {
     image: '<i class="fa fa-coffee fa-5x" aria-hidden="true"></i>',
-    text: "It's time for a coffee break!"
+    text: "It's time for a coffee break!",
+    state: '<i class="fa fa-coffee fa-5" aria-hidden="true"></i>'
 };
 workText = {
     image: '<i class="fa fa-keyboard-o fa-5x" aria-hidden="true"></i>',
-    text: "It's time to go back to work!"
+    text: "It's time to go back to work!",
+    state: '<i class="fa fa-keyboard-o fa-5" aria-hidden="true"></i>'
 };
 longbreakText = {
     image: '<i class="fa fa-coffee fa-5x" aria-hidden="true"></i>',
-    text: "It's time for a long break!"
+    text: "It's time for a long break!",
+    state: '<i class="fa fa-coffee fa-5" aria-hidden="true"></i>'
 };
 
 coffeeButtonText = "Take a break!"
@@ -50,8 +53,8 @@ function saveLastSeen() {
 
 function resetNewDayIfRequired() {
   ts = getEpoch();
-  load_time = JSON.parse(localStorage.getItem("last_seen_time"));
-  if (load_time === null) {
+  last_seen_time = JSON.parse(localStorage.getItem("last_seen_time"));
+  if (last_seen_time === null) {
     // ok, noop
   } else {
     if (ts - last_seen_time > resetNewDayDiff ) {
@@ -164,6 +167,7 @@ function startCounting() {
         }
         else {
             notifyMe('Times UP!', messageConfig[counter].text);
+            $('#pomodoro_state').html(messageConfig[counter].state)
             clearInterval(counterBack);
             var modal = $('#myModal')
             modal.find('.modal-title').html(messageConfig[counter].image);
