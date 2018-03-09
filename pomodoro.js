@@ -173,7 +173,7 @@ function startCounting() {
             modal.find('.modal-title').html(messageConfig[counter].image);
             modal.find('.modal-body').html(messageConfig[counter].text);
             $('.progress-bar').css('width', '100%');
-            //$('#pbar').removeClass('active');
+            $('#pbar').removeClass('active');
             // Every odd number is a pomodoro
             // don't let switching task before a break!
             // also increase pomodoros only when working not when having a break
