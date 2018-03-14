@@ -14,19 +14,19 @@ longBreak = getLongBreak();
 selected_task = '';
 
 coffeText = {
-    image: '<i class="fa fa-coffee fa-5x" aria-hidden="true"></i>',
+    image: '<i class="fas fa-coffee fa-5x" aria-hidden="true"></i>',
     text: "It's time for a coffee break!",
-    state: '<i class="fa fa-coffee fa-5" aria-hidden="true"></i>'
+    state: '<i class="fas fa-coffee" aria-hidden="true"></i>'
 };
 workText = {
-    image: '<i class="fa fa-keyboard-o fa-5x" aria-hidden="true"></i>',
+    image: '<i class="far fa-keyboard fa-5x" aria-hidden="true"></i>',
     text: "It's time to go back to work!",
-    state: '<i class="fa fa-keyboard-o fa-5" aria-hidden="true"></i>'
+    state: '<i class="far fa-keyboard" aria-hidden="true"></i>'
 };
 longbreakText = {
-    image: '<i class="fa fa-coffee fa-5x" aria-hidden="true"></i>',
+    image: '<i class="fas fa-coffee fa-5x" aria-hidden="true"></i>',
     text: "It's time for a long break!",
-    state: '<i class="fa fa-coffee fa-5" aria-hidden="true"></i>'
+    state: '<i class="fas fa-coffee" aria-hidden="true"></i>'
 };
 
 coffeeButtonText = "Take a break!"
@@ -37,9 +37,13 @@ messageConfig = [workText, coffeText, workText, coffeText, workText, coffeText, 
 closeButtonText = [workButtonText, coffeeButtonText, workButtonText, coffeeButtonText, workButtonText, coffeeButtonText, workButtonText, coffeeButtonText, workButtonText];
 
 
-pomodoroGlyph = '<i class="fa fa-check-square-o" aria-hidden="true"></i>';
-externalInterrupt = '<i class="fa fa-times" aria-hidden="true"></i>';
-internalInterrupt = '<i class="fa fa-times" aria-hidden="true"></i>';
+pomodoroGlyph = '<i class="far fa-check-square" aria-hidden="true"></i>';
+// pomodoroGlyph = '<i class="far fa-thumbs-up" aria-hidden="true"></i>';
+externalInterrupt = '<i class="fa fa-chevron-right" aria-hidden="true"></i>';
+// externalInterrupt = '<i class="far fa-times-circle" aria-hidden="true"></i>';
+internalInterrupt = '<i class="fa fa-chevron-right" aria-hidden="true"></i>';
+// internalInterrupt = '<i class="far fa-times-circle" aria-hidden="true"></i>';
+voidGlyph = '<i class="far fa-thumbs-down" aria-hidden="true"></i>'
 
 function getEpoch() {
   var ts = Math.floor((new Date).getTime()/1000);
@@ -87,39 +91,33 @@ function saveCounter(c) {
     localStorage.setItem("counter", JSON.stringify(c));
 }
 
+function loadData(name) {
+  var data = null;
+
+  try {
+      data = JSON.parse(localStorage.getItem(name));
+  }
+  catch (err) {}
+
+  // an empty array is a valid data source for the the bootstap-table
+  if (data === null) {
+      data = [];
+  }
+
+  return data;
+}
+
 function loadTodo() {
-
-    var data = null;
-
-    try {
-        data = JSON.parse(localStorage.getItem("todoData"));
-    }
-    catch (err) {}
-
-    // an empty array is a valid data source for the the bootstap-table
-    if (data === null) {
-        data = [];
-    }
-
-    return data;
+    return loadData("todoData");
 }
 
 
 function loadUnplanned() {
+    return loadData("unplannedData");
+}
 
-    var data = null;
-
-    try {
-        data = JSON.parse(localStorage.getItem("unplannedData"));
-    }
-    catch (err) {}
-
-    // an empty array is a valid data source for the the bootstap-table
-    if (data === null) {
-        data = [];
-    }
-
-    return data;
+function loadInventory() {
+  return loadData("inventoryData")
 }
 
 function formatSeconds(seconds) {
@@ -184,14 +182,14 @@ function startCounting() {
                 $('#externalButton').addClass('disabled');
                 $('#internalButton').prop('disabled', true);
                 $('#externalButton').prop('disabled', true);
-                $('#myButton').prop('disabled', true);
-                $('#myButton').addClass('disabled');
+                $('#startButton').prop('disabled', true);
+                $('#startButton').addClass('disabled');
                 loadTasks();
             }
             else {
                 $("#switchTask").show();
-                $('#myButton').prop('disabled', false);
-                $('#myButton').removeClass('disabled');
+                $('#startButton').prop('disabled', false);
+                $('#startButton').removeClass('disabled');
             }
             $('#closeModal').text(closeButtonText[counter]);
             $('#myModal').modal({
@@ -251,6 +249,10 @@ function loadTasks() {
     data = loadUnplanned();
     $('#unplanned_count').html(data.length);
     $('#unplanned_table').bootstrapTable('load', data);
+
+    data = loadInventory();
+    $('#inventory_count').html(data.length);
+    $('#inventory_table').bootstrapTable('load', data);
 }
 
 function countCompletedPomodoros(data) {
@@ -277,13 +279,16 @@ function populateTasks() {
             title: 'Task name'
         }, {
             field: 'pomodoros',
-            title: '# of Pomodoros'
+            title: 'Completed'
         }, {
             field: 'internal',
-            title: '# of Internal'
+            title: 'Internal'
         }, {
             field: 'external',
-            title: '# of External'
+            title: 'External'
+        }, {
+            field: 'void',
+            title: 'Void'
         }],
         data: data
     });
@@ -303,12 +308,38 @@ function populateTasks() {
         }],
         data: data
     });
+
+    data = loadInventory();
+    $('#inventory_count').html(data.length);
+
+    $('#inventory_table').bootstrapTable({
+        columns: [{
+            checkbox: true,
+            formatter: stateFormatter
+        }, {
+            width: 400,
+            field: 'task',
+            title: 'Task name'
+        }],
+        data: data
+    });
 }
 
 function saveTasks(data) {
     localStorage.setItem("todoData", JSON.stringify(data));
 }
 
+
+function modifyTask(name, index) {
+
+  data = loadTodo();
+
+  task = data[index];
+  task.task = name;
+  data.splice(index, 1, task);
+  saveTasks(data);
+  loadTasks();
+}
 
 function addNewTodoItem(name) {
     data = loadTodo();
@@ -317,10 +348,21 @@ function addNewTodoItem(name) {
         pomodoros: 0,
         external: 0,
         internal: 0,
-        done: false
+        done: false,
+        void: 0
     });
     saveTasks(data);
     loadTasks();
+}
+
+function addNewInventory(name) {
+  data = loadInventory();
+  data.push({
+    task: name
+  });
+
+  saveInventory(data);
+  loadTasks();
 }
 
 
@@ -328,6 +370,9 @@ function saveUnplanned(data) {
     localStorage.setItem("unplannedData", JSON.stringify(data));
 }
 
+function saveInventory(data) {
+    localStorage.setItem("inventoryData", JSON.stringify(data));
+}
 
 function addNewUnplanned(name) {
     data = loadUnplanned();
@@ -359,6 +404,7 @@ function stateFormatter(value, row, index) {
     row.pomodoros = (pomodoroGlyph + ' ').repeat(row.pomodoros);
     row.internal = (internalInterrupt + ' ').repeat(row.internal);
     row.external = (externalInterrupt + ' ').repeat(row.external);
+    row.void = (voidGlyph + ' ').repeat(row.void);
 
     if (st != null) {
         if (row.task == st.task) {
@@ -421,6 +467,21 @@ function getSelectedTask() {
     return selected_task;
 }
 
+function increaseVoid() {
+  st = getSelectedTask();
+  task_name = st.task;
+
+  data = loadTodo();
+  for (var key in data) {
+      if (data[key].task == task_name) {
+          data[key].void += 1;
+      }
+
+  }
+  saveTasks(data);
+  loadTasks();
+}
+
 function increasePomodoro() {
 
     st = getSelectedTask();
@@ -435,6 +496,30 @@ function increasePomodoro() {
     }
     saveTasks(data);
     loadTasks();
+
+}
+
+function editSelected() {
+  st = $('#todo_table').bootstrapTable('getSelections');
+
+  if (st.length == 0) {
+      return;
+  }
+
+  task_name = st[0].task.replace(/(<([^>]+)>)/ig, "");
+
+  $('#edit_task_name').val(task_name);
+
+  data = loadTodo();
+  var i = 0;
+  for (var key in data) {
+      if (data[key].task == task_name) {
+        break;
+      }
+      i++;
+  }
+
+  $('#task_index').val(i);
 
 }
 
@@ -460,6 +545,28 @@ function removeSelected() {
     saveTasks(data);
     loadTasks();
 
+}
+
+function removeSelectedInventory() {
+  st = $('#inventory_table').bootstrapTable('getSelections');
+
+  if (st.length == 0) {
+      return;
+  }
+
+  task_name = st[0].task.replace(/(<([^>]+)>)/ig, "");
+
+  data = loadInventory();
+  var i = 0;
+  for (var key in data) {
+      if (data[key].task == task_name) {
+          break;
+      }
+      i++;
+  }
+  data.splice(i, 1);
+  saveInventory(data);
+  loadTasks();
 }
 
 function markDoneSelected() {
@@ -591,4 +698,59 @@ function cleanupUnplanned() {
     data = [];
     saveUnplanned(data);
     loadTasks();
+}
+
+function switchBetweenPanels(active) {
+
+  items = ["todo", "unplanned", "inventory"];
+
+  name = active.id.split("_")[0]
+  index = items.indexOf(name);
+  items.splice(index, 1);
+
+
+  $('#'+name+'_menu').addClass("active");
+
+  for (var i = 0; i < items.length; i++) {
+    $('#'+items[i]+'_menu').removeClass("active");
+    $('#'+items[i]+'_panel').addClass("hidden");
+  }
+
+  $('#'+name+'_panel').removeClass("hidden");
+}
+
+function moveFromUnplannedToInventory(task) {
+
+  data = loadUnplanned();
+
+  var i = 0;
+
+  for (var key in data) {
+      if (data[key].task == task.task) {
+          break;
+      }
+      i++;
+  }
+  data.splice(i, 1);
+  saveUnplanned(data);
+
+  addNewInventory(task.task);
+}
+
+function moveFromInventoryToTodo(task) {
+
+    data = loadInventory();
+
+    var i = 0;
+
+    for (var key in data) {
+        if (data[key].task == task.task) {
+            break;
+        }
+        i++;
+    }
+    data.splice(i, 1);
+    saveInventory(data);
+
+    addNewTodoItem(task.task);
 }

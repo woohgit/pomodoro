@@ -11,7 +11,8 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="https://use.fontawesome.com/1a76820616.js"></script>
+    <!-- <script src="https://use.fontawesome.com/1a76820616.js"></script> -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.js"></script>
     <script type="text/javascript" src="pomodoro.js"></script>
@@ -224,6 +225,31 @@
         </div>
     </div>
 
+    <!-- Edit Task Modal -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="editTaskModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" style="text-align: center">Edit task</h4>
+                    <div class="modal-body">
+                        <form class="form-inline" action="#">
+                            <div class="form-group">
+                                <label for="task_name">Task</label>
+                                <input type="text" class="form-control" id="edit_task_name" style="width: 400px;">
+                                <input type="hidden" name="task_index" id="task_index" value="">
+                            </div>
+                            <button id="modifyTask" type="submit" class="btn btn-default" data-dismiss="modal">Modify</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" id="closeTaskModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div style="width: 400px; text-align: center; margin: 0 auto; margin-top: 20px; ">
         <button type="button" class="btn btn-default" area-label="Info" data-toggle="modal" data-target="#infoModal">
       <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Info
@@ -243,7 +269,7 @@
     <div class="container-fluid">
         <div style="padding: 20px;">
             <div class="panel panel-primary" style="width: 500px; margin: 0 auto; ">
-                <div class="panel-heading"><i class="fa fa-clock-o" aria-hidden="true"></i> Pomodoro <span style="padding-left: 40px;">Current status</span> <span id="pomodoro_state"><i class="fa fa-keyboard-o fa-5" aria-hidden="true"></i></span><span style="padding-left: 40px; padding-right: 5px;">Completed</span><span class="badge" id="completed_count">0</span></div>
+                <div class="panel-heading"><i class="far fa-clock" aria-hidden="true"></i> Pomodoro <span style="padding-left: 40px;">Current status</span> <span id="pomodoro_state"><i class="far fa-keyboard" aria-hidden="true"></i></span><span style="padding-left: 40px; padding-right: 5px;">Completed</span><span class="badge" id="completed_count">0</span></div>
                 <div class="panel-body">
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped" role="progressbar" id="pbar" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
@@ -259,7 +285,7 @@
                 <button id="internalButton" type="button" class="btn btn-default disabled" disabled="true" autocomplete="off" data-toggle="modal" data-target="#interruptModal">
                 Internal interrupt
             </button>
-                <button id="myButton" type="button" class="btn btn-success" autocomplete="off">
+                <button id="startButton" type="button" class="btn btn-success" autocomplete="off">
                 Start Pomodoro
             </button>
                 <button id="externalButton" type="button" class="btn btn-default disabled" disabled="true" autocomplete="off" data-toggle="modal" data-target="#interruptModal">
@@ -270,7 +296,9 @@
             <div class="panel panel-primary" style="width: 800px; margin: 0 auto; margin-bottom: 10px;">
                 <ul class="nav nav-pills">
                     <li role="presentation" class="active" id="todo_menu"><a href="#"><i class="fa fa-tasks" aria-hidden="true"></i> To do today <span class="badge" id="todo_count">0</span></a></li>
+                    <li role="presentation" id="inventory_menu"><a href="#"><i class="fa fa-tasks" aria-hidden="true"></i> Inventory Sheet <span class="badge" id="inventory_count">0</span></a></li>
                     <li role="presentation" id="unplanned_menu"><a href="#"><i class="fa fa-tasks" aria-hidden="true"></i> Unplanned & Urgent <span class="badge" id="unplanned_count">0</span></a></li>
+
                 </ul>
             </div>
 
@@ -280,15 +308,18 @@
                     <table id="todo_table" class="table table-striped" data-click-to-select="true" data-single-select="true" data-maintain-selected="true"></table>
                 </div>
                 <div class="panel-footer" style="text-align: center;">
-                    <button id="addTask" type="button" class="btn btn-default" data-toggle="modal" data-target="#addTaskModal" autocomplete="off">
-                Add task
-              </button>
-                    <button id="removeSelected" class="btn btn-large btn-default" style="margin: 0px 15px 0px 15px;">
-                Remove selected
-              </button>
-                    <button id="markAsDone" class="btn btn-large btn-default">
-                Mark as done
-              </button>
+                  <button id="addTask" type="button" class="btn btn-default" data-toggle="modal" data-target="#addTaskModal" autocomplete="off">
+                    Add task
+                  </button>
+                  <button id="editSelected" class="btn btn-large btn-default" style="margin: 0px 15px 0px 15px;" data-toggle="modal" data-target="#editTaskModal" autocomplete="off">
+                    Edit selected
+                  </button>
+                  <button id="removeSelected" class="btn btn-large btn-default" style="margin: 0px 15px 0px 0px;">
+                    Remove selected
+                  </button>
+                  <button id="markAsDone" class="btn btn-large btn-default">
+                    Mark as done
+                  </button>
                 </div>
             </div>
 
@@ -298,9 +329,27 @@
                     <table id="unplanned_table" class="table table-striped" data-click-to-select="true" data-single-select="true" data-maintain-selected="true"></table>
                 </div>
                 <div class="panel-footer" style="text-align: center;">
-                    <button id="cleanupUnplanned" class="btn btn-large btn-default">
-                CleanUp
-              </button>
+                    <button id="moveToInventory" class="btn btn-large btn-default">
+                    Move to Inventory
+                    </button>
+                    <button id="cleanupUnplanned" class="btn btn-large btn-default" style="margin: 0px 15px 0px 15px;">
+                      Remove all
+                  </button>
+                </div>
+            </div>
+
+            <div id="inventory_panel" class="panel panel-primary hidden" style="width: 800px; margin: 0 auto;">
+                <div class="panel-heading"></div>
+                <div class="panel-body">
+                    <table id="inventory_table" class="table table-striped" data-click-to-select="true" data-single-select="true" data-maintain-selected="true"></table>
+                </div>
+                <div class="panel-footer" style="text-align: center;">
+                  <button id="moveToTodo" class="btn btn-large btn-default">
+                  Move to ToDo
+                  </button>
+                  <button id="removeFromInventory" class="btn btn-large btn-default">
+                    Remove
+                  </button>
                 </div>
             </div>
 
@@ -318,7 +367,18 @@
         });
 
 
-        $('#myButton').on('click', function() {
+        $('#modifyTask').on('click', function(event) {
+            event.preventDefault();
+            task_name = $('#edit_task_name').val();
+            task_index = $('#task_index').val();
+            modifyTask(task_name, task_index);
+            populateTasks();
+            $('#edit_task_name').val("");
+            $('#task_index').val("");
+        });
+
+
+        $('#startButton').on('click', function() {
 
             st = $('#todo_table').bootstrapTable('getSelections');
 
@@ -339,6 +399,7 @@
             // When the counter is running, change text
             if (counterBack >= 1) {
                 i = 0;
+                increaseVoid();
                 $('.progress-bar').css('width', '100%');
                 $('#panel-footer').text(formatSeconds(workingPomodoro));
                 counter--;
@@ -349,11 +410,10 @@
                 counterBack = 0;
                 enableButtonsDuringNonPomodoro();
                 $('#pbar').removeClass('active');
-            }
-            else {
+            } else {
                 disableButtonsDuringPomodoro();
                 startCounting();
-                $(this).text("Cancel pomodoro");
+                $(this).text("Void pomodoro");
                 $(this).removeClass("btn-success");
                 $(this).addClass("btn-danger");
             }
@@ -374,6 +434,14 @@
             localStorage.removeItem("selected_task");
         });
 
+        $('#removeFromInventory').on('click', function() {
+            removeSelectedInventory();
+        });
+
+
+        $('#editSelected').on('click', function() {
+          editSelected();
+        });
 
         $('#settingsModalButton').on('click', function() {
             var settings = null;
@@ -407,32 +475,24 @@
         $('#switchTask').on('click', function(event) {
             enableButtonsDuringNonPomodoro();
             counterBack = 0;
-            $('#myButton').text("Start pomodoro");
-            $('#myButton').removeClass("btn-danger");
-            $('#myButton').addClass("btn-success");
+            $('#startButton').text("Start pomodoro");
+            $('#startButton').removeClass("btn-danger");
+            $('#startButton').addClass("btn-success");
         });
 
 
         $('#todo_menu').on('click', function(event) {
-
-            $(this).addClass("active");
-            $('#unplanned_menu').removeClass("active");
-
-            $('#unplanned_panel').addClass("hidden");
-            $('#todo_panel').removeClass("hidden");
-
+            switchBetweenPanels(this);
             loadTasks();
-
         });
 
         $('#unplanned_menu').on('click', function(event) {
+            switchBetweenPanels(this);
+            loadTasks();
+        });
 
-            $(this).addClass("active");
-            $('#todo_menu').removeClass("active");
-
-            $('#todo_panel').addClass("hidden");
-            $('#unplanned_panel').removeClass("hidden");
-
+        $('#inventory_menu').on('click', function(event) {
+            switchBetweenPanels(this);
             loadTasks();
         });
 
@@ -456,6 +516,27 @@
                 $('#unplanned_type').val('internal');
             }
         });
+
+        $('#moveToInventory').on('click', function() {
+          st = $('#unplanned_table').bootstrapTable('getSelections');
+
+          if (st == '') {
+              return;
+          }
+
+          moveFromUnplannedToInventory(st[0]);
+        });
+
+        $('#moveToTodo').on('click', function() {
+          st = $('#inventory_table').bootstrapTable('getSelections');
+
+          if (st == '') {
+              return;
+          }
+
+          moveFromInventoryToTodo(st[0]);
+        });
+
 
         $('#cleanupUnplanned').on('click', function() {
             cleanupUnplanned();
